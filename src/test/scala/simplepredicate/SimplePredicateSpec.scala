@@ -14,7 +14,7 @@ class SimplePredicateSpec extends FlatSpec with Matchers {
   }
 
   it should "error for no double value" in {
-    lessOrEqualPredicate.isTrue(Map("f1" -> Right("a"))) shouldEqual Right("Missing Feature")
+    lessOrEqualPredicate.isTrue(Map("f1" -> Right("a"))) shouldEqual Right("Expected Numerical feature")
   }
 
   val isMissingPredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="isMissing"/>)
@@ -45,5 +45,13 @@ class SimplePredicateSpec extends FlatSpec with Matchers {
     equalsPredicate.isTrue(Map("f1" -> Left(3))) shouldEqual Left(true)
   }
 
-  // TODO: spec equals on string value
+  val equalsStrPredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="equal" value="v3"/>)
+
+  it should "return false for num value" in {
+    equalsStrPredicate.isTrue(Map("f1" -> Left(3))) shouldEqual Left(false)
+  }
+
+  it should "return true for equal str value" in {
+    equalsStrPredicate.isTrue(Map("f1" -> Right("v3"))) shouldEqual Left(true)
+  }
 }

@@ -41,20 +41,22 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
           case Some(Right(featureStrValue)) =>
             operator match {
               case _ =>
-                Right("Missing Feature")
+                Right("Expected Numerical feature")
             }
         }
       case Right(strValue) =>
         features.get(field) match {
           case Some(Left(_)) =>
             operator match {
-              case IS_MISSING =>
+              case _ =>
                 Left(false)
             }
           case Some(Right(featureStrValue)) =>
             operator match {
               case IS_MISSING =>
                 Left(featureStrValue == "")
+              case EQUALS =>
+                Left(featureStrValue == strValue)
             }
           case None =>
             operator match {
