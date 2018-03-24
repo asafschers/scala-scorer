@@ -20,42 +20,51 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
   val MATH_OPS = Array(GREATER_THAN, LESS_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL)
 
   def isTrue(features: Map[String, Either[Double, String]]): Either[Boolean, String] = {
+    val featureValue = features.get(field)
     value match {
       case Left(numValue) =>
-        features.get(field) match {
-          case Some(Left(featureNumValue)) =>
-            operator match {
-              case GREATER_THAN =>
-                Left(featureNumValue > numValue)
-              case LESS_THAN =>
-                Left(featureNumValue < numValue)
-              case GREATER_OR_EQUAL =>
-                Left(featureNumValue >= numValue)
-              case LESS_OR_EQUAL =>
-                Left(featureNumValue <= numValue)
-              case EQUALS =>
-                Left(featureNumValue == numValue)
-            }
-          case Some(Right(_)) =>
-            Right("Expected Numerical feature")
-        }
+        isTrueNum(featureValue, numValue)
       case Right(strValue) =>
-        features.get(field) match {
-          case Some(Left(_)) =>
-            Left(false)
-          case Some(Right(featureStrValue)) =>
-            operator match {
-              case IS_MISSING =>
-                Left(featureStrValue == "")
-              case EQUALS =>
-                Left(featureStrValue == strValue)
-            }
-          case None =>
-            operator match {
-            case IS_MISSING =>
-              Left(features.get(field).isEmpty)
-          }
+        isTrueStr(featureValue, strValue)
+    }
+  }
+
+  private def isTrueStr(featureValue: Option[Either[Double, String]], strValue: String) = {
+    featureValue match {
+      case Some(Left(_)) =>
+        Left(false)
+      case Some(Right(featureStrValue)) =>
+        operator match {
+          case IS_MISSING =>
+            Left(featureStrValue == "")
+          case EQUALS =>
+            Left(featureStrValue == strValue)
         }
+      case None =>
+        operator match {
+          case IS_MISSING =>
+            Left(featureValue.isEmpty)
+        }
+    }
+  }
+
+  private def isTrueNum(featureValue: Option[Either[Double, String]], numValue: Double) = {
+    featureValue match {
+      case Some(Left(featureNumValue)) =>
+        operator match {
+          case GREATER_THAN =>
+            Left(featureNumValue > numValue)
+          case LESS_THAN =>
+            Left(featureNumValue < numValue)
+          case GREATER_OR_EQUAL =>
+            Left(featureNumValue >= numValue)
+          case LESS_OR_EQUAL =>
+            Left(featureNumValue <= numValue)
+          case EQUALS =>
+            Left(featureNumValue == numValue)
+        }
+      case Some(Right(_)) =>
+        Right("Expected Numerical feature")
     }
   }
 }
