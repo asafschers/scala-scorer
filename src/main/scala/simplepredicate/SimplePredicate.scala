@@ -10,34 +10,43 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
   val IS_MISSING       = "isMissing"
   val MATH_OPS = Array(GREATER_THAN, LESS_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL)
 
-  def isTrue(features: Map[String, Option[Double]]): Either[Boolean, String] = {
+  def isTrue(features: Map[String, Either[Double, String]]): Either[Boolean, String] = {
     value match {
       case Left(numValue) =>
-        features.get(field).flatten match {
-          case Some(featureValue) =>
+        features.get(field) match {
+          case Some(Left(featureNumValue)) =>
             operator match {
               case GREATER_THAN =>
-                Left(featureValue > numValue)
+                Left(featureNumValue > numValue)
               case LESS_THAN =>
-                Left(featureValue < numValue)
+                Left(featureNumValue < numValue)
               case GREATER_OR_EQUAL =>
-                Left(featureValue >= numValue)
+                Left(featureNumValue >= numValue)
               case LESS_OR_EQUAL =>
-                Left(featureValue <= numValue)
+                Left(featureNumValue <= numValue)
               case EQUALS =>
-                Left(featureValue == numValue)
+                Left(featureNumValue == numValue)
               case _ =>
                 Right("Unknown Operator")
             }
-          case None =>
+          case Some(Right(featureStrValue)) =>
             operator match {
               case IS_MISSING =>
-                Left(features.get(field).flatten.isEmpty)
+                Left(features.get(field).isEmpty)
               case _ =>
                 Right("Missing Feature")
             }
         }
-//      case Right(numValue) =>
+      case Right(strValue) =>
+        features.get(field) match {
+          case Some(Left(_)) =>
+            Right("String Predicate recieved Num value")
+          case Some(Right(featureStrValue)) =>
+            operator match {
+              case IS_MISSING =>
+                Left(features.get(field).isEmpty)
+            }
+        }
     }
   }
 }
