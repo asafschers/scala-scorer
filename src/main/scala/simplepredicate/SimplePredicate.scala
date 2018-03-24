@@ -1,5 +1,14 @@
 package simplepredicate
 
+object SimplePredicate {
+  def setFromXml(xml_predicate: scala.xml.Elem): SimplePredicate = {
+    val field: String = (xml_predicate \ "@field").text
+    val operator: String = (xml_predicate \ "@operator").text
+    val stringValue: String = (xml_predicate \ "@value").text
+    val value = try { Left(stringValue.toDouble) } catch { case _ => Right(stringValue) }
+    new SimplePredicate(field, operator, value)
+  }
+}
 
 class SimplePredicate(field: String, operator: String, value: Either[Double,String]) {
   val GREATER_THAN     = "greaterThan"
@@ -31,8 +40,6 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
             }
           case Some(Right(featureStrValue)) =>
             operator match {
-              case IS_MISSING =>
-                Left(features.get(field).isEmpty)
               case _ =>
                 Right("Missing Feature")
             }
@@ -40,24 +47,21 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
       case Right(strValue) =>
         features.get(field) match {
           case Some(Left(_)) =>
-            Right("String Predicate recieved Num value")
+            operator match {
+              case IS_MISSING =>
+                Left(false)
+            }
           case Some(Right(featureStrValue)) =>
             operator match {
               case IS_MISSING =>
-                Left(features.get(field).isEmpty)
+                Left(featureStrValue == "")
             }
+          case None =>
+            operator match {
+            case IS_MISSING =>
+              Left(features.get(field).isEmpty)
+          }
         }
     }
   }
 }
-
-object SimplePredicate {
-  def setFromXml(xml_predicate: scala.xml.Elem): SimplePredicate = {
-    val field: String = (xml_predicate \ "@field").text
-    val operator: String = (xml_predicate \ "@operator").text
-    val stringValue: String = (xml_predicate \ "@value").text
-    val value = try { Left(stringValue.toDouble) } catch { case _ => Right(stringValue) }
-    new SimplePredicate(field, operator, value)
-  }
-}
-
