@@ -35,8 +35,6 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
                 Left(featureNumValue <= numValue)
               case EQUALS =>
                 Left(featureNumValue == numValue)
-              case _ =>
-                Right("Unknown Operator")
             }
           case Some(Right(featureStrValue)) =>
             operator match {
@@ -47,10 +45,7 @@ class SimplePredicate(field: String, operator: String, value: Either[Double,Stri
       case Right(strValue) =>
         features.get(field) match {
           case Some(Left(_)) =>
-            operator match {
-              case _ =>
-                Left(false)
-            }
+            Left(false)
           case Some(Right(featureStrValue)) =>
             operator match {
               case IS_MISSING =>
