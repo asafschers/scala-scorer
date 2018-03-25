@@ -10,7 +10,9 @@ object SimplePredicate {
   }
 }
 
-class SimplePredicate(field: String, operator: String, predicateValue: Either[Double,String]) {
+// TODO: sealed trait where two case classes inherit from it instead of either as input
+
+class SimplePredicate(field: String, operator: String, predicateValue: Either[Double, String]) {
   val GREATER_THAN     = "greaterThan"
   val LESS_THAN        = "lessThan"
   val LESS_OR_EQUAL    = "lessOrEqual"
@@ -19,7 +21,7 @@ class SimplePredicate(field: String, operator: String, predicateValue: Either[Do
   val IS_MISSING       = "isMissing"
   val MATH_OPS = Array(GREATER_THAN, LESS_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL)
 
-  def isTrue(features: Map[String, Either[Double, String]]): Either[Boolean, String] = {
+  def isTrue(features: Map[String, Either[Double, String]]): Either[String, Boolean] = {
     val inputValue = features.get(field)
     predicateValue match {
       case Left(numValue) =>
@@ -34,36 +36,36 @@ class SimplePredicate(field: String, operator: String, predicateValue: Either[Do
       case Some(Left(featureNumValue)) =>
         operator match {
           case GREATER_THAN =>
-            Left(featureNumValue > numValue)
+            Right(featureNumValue > numValue)
           case LESS_THAN =>
-            Left(featureNumValue < numValue)
+            Right(featureNumValue < numValue)
           case GREATER_OR_EQUAL =>
-            Left(featureNumValue >= numValue)
+            Right(featureNumValue >= numValue)
           case LESS_OR_EQUAL =>
-            Left(featureNumValue <= numValue)
+            Right(featureNumValue <= numValue)
           case EQUALS =>
-            Left(featureNumValue == numValue)
+            Right(featureNumValue == numValue)
         }
-      case Some(Right(_)) =>
-        Left(false)
+      case Some(Right(featureStrValue)) =>
+        Left("Expected Numerical feature")
     }
   }
 
   private def isTrueStr(featureValue: Option[Either[Double, String]], strValue: String) = {
     featureValue match {
       case Some(Left(_)) =>
-        Left(false)
+        Right(false)
       case Some(Right(featureStrValue)) =>
         operator match {
           case IS_MISSING =>
-            Left(featureStrValue == "")
+            Right(featureStrValue == "")
           case EQUALS =>
-            Left(featureStrValue == strValue)
+            Right(featureStrValue == strValue)
         }
       case None =>
         operator match {
           case IS_MISSING =>
-            Left(featureValue.isEmpty)
+            Right(featureValue.isEmpty)
         }
     }
   }
