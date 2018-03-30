@@ -1,4 +1,5 @@
 package simplesetpredicate
+import scala.util.matching._
 
 object SimpleSetPredicate {
   def setFromXml(xml_predicate: scala.xml.Elem): SimpleSetPredicate = {
@@ -9,11 +10,11 @@ object SimpleSetPredicate {
   }
 
   def formatValuesArray(valuesInput: String): Array[String] = {
-    valuesInput.split(" ")
+    ("\"(.*?)\"|([^\\s]+)").r.findAllIn(valuesInput).toArray.map(value => value.replace("\"",""))
   }
 }
 
-sealed trait Value 
+sealed trait Value
 final case class CategoricalValue(b: String) extends Value
 final case class NumericalValue(a: Double) extends Value
 
@@ -27,6 +28,8 @@ class SimpleSetPredicate(field: String, operator: String, values: Array[String])
         Right(false)
       case Some(CategoricalValue(categoricalValue)) =>
         Right(values.contains(categoricalValue))
+      case None =>
+        Left("Missing categorical feature")
     }
   }
 }
