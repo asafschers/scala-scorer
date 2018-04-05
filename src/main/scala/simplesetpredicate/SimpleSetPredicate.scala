@@ -1,8 +1,9 @@
 package simplesetpredicate
+import value._
 import scala.util.matching._
 
 object SimpleSetPredicate {
-  def setFromXml(xml_predicate: scala.xml.Elem): SimpleSetPredicate = {
+  def fromXml(xml_predicate: scala.xml.Elem): SimpleSetPredicate = {
     val field: String = (xml_predicate \ "@field").text
     val operator: String = (xml_predicate \ "@operator").text
     val values: Array[String] = formatValuesArray((xml_predicate \ "Array").text)
@@ -13,10 +14,6 @@ object SimpleSetPredicate {
     ("\"(.*?)\"|([^\\s]+)").r.findAllIn(valuesInput).toArray.map(value => value.replace("\"",""))
   }
 }
-
-sealed trait Value
-final case class CategoricalValue(b: String) extends Value
-final case class NumericalValue(a: Double) extends Value
 
 class SimpleSetPredicate(field: String, operator: String, values: Array[String]) {
   val IS_IN = "is_in"

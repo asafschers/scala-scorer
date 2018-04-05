@@ -1,9 +1,10 @@
 package simplesetpredicate
+import value._
 import org.scalatest._
 
 class SimpleSetPredicateSpec extends FlatSpec with Matchers {
 
-  val noQuotesPredicate: SimpleSetPredicate = SimpleSetPredicate.setFromXml(
+  val noQuotesPredicate: SimpleSetPredicate = SimpleSetPredicate.fromXml(
     <SimpleSetPredicate field="f1" booleanOperator="isIn">
       <Array n="3" type="string">f2v1 f2v2 f2v3</Array>
     </SimpleSetPredicate>
@@ -21,7 +22,7 @@ class SimpleSetPredicateSpec extends FlatSpec with Matchers {
     noQuotesPredicate.isTrue(Map("f1" -> NumericalValue(1.9))) shouldEqual Right(false)
   }
 
-  val QuotesPredicate: SimpleSetPredicate = SimpleSetPredicate.setFromXml(
+  val QuotesPredicate: SimpleSetPredicate = SimpleSetPredicate.fromXml(
     <SimpleSetPredicate field="f1" booleanOperator="isIn">
       <Array n="6" type="string">
         &quot;Missing&quot; &quot;No Match&quot;

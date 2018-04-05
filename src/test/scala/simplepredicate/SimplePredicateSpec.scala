@@ -1,9 +1,10 @@
 package simplepredicate
+import value._
 import org.scalatest._
 
 class SimplePredicateSpec extends FlatSpec with Matchers {
 
-  val lessOrEqualPredicate: SimplePredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="lessOrEqual" value="2.0"/>)
+  val lessOrEqualPredicate: SimplePredicate = SimplePredicate.fromXml(<SimplePredicate field="f1" operator="lessOrEqual" value="2.0"/>)
 
   it should "return true for smaller value" in {
     lessOrEqualPredicate.isTrue(Map("f1" -> NumericalValue(1.9))) shouldEqual Right(true)
@@ -17,7 +18,7 @@ class SimplePredicateSpec extends FlatSpec with Matchers {
     lessOrEqualPredicate.isTrue(Map("f1" -> CategoricalValue("a"))) shouldEqual Left("Expected Numerical Feature")
   }
 
-  val isMissingPredicate: SimplePredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="isMissing"/>)
+  val isMissingPredicate: SimplePredicate = SimplePredicate.fromXml(<SimplePredicate field="f1" operator="isMissing"/>)
 
   it should "return true for no key" in {
     isMissingPredicate.isTrue(Map()) shouldEqual Right(true)
@@ -35,7 +36,7 @@ class SimplePredicateSpec extends FlatSpec with Matchers {
     isMissingPredicate.isTrue(Map("f1" -> CategoricalValue("a"))) shouldEqual Right(false)
   }
 
-  val equalsPredicate: SimplePredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="equal" value="3"/>)
+  val equalsPredicate: SimplePredicate = SimplePredicate.fromXml(<SimplePredicate field="f1" operator="equal" value="3"/>)
 
   it should "return true for other value" in {
     equalsPredicate.isTrue(Map("f1" -> NumericalValue(1.9))) shouldEqual Right(false)
@@ -45,7 +46,7 @@ class SimplePredicateSpec extends FlatSpec with Matchers {
     equalsPredicate.isTrue(Map("f1" -> NumericalValue(3))) shouldEqual Right(true)
   }
 
-  val equalsStrPredicate = SimplePredicate.setFromXml(<SimplePredicate field="f1" operator="equal" value="v3"/>)
+  val equalsStrPredicate = SimplePredicate.fromXml(<SimplePredicate field="f1" operator="equal" value="v3"/>)
 
   it should "return false for num value" in {
     equalsStrPredicate.isTrue(Map("f1" -> NumericalValue(3))) shouldEqual Right(false)

@@ -1,7 +1,8 @@
 package simplepredicate
+import value._
 
 object SimplePredicate {
-  def setFromXml(xml_predicate: scala.xml.Elem): SimplePredicate = {
+  def fromXml(xml_predicate: scala.xml.Elem): SimplePredicate = {
     val field: String = (xml_predicate \ "@field").text
     val operator: String = (xml_predicate \ "@operator").text
     val stringValue: String = (xml_predicate \ "@value").text
@@ -9,10 +10,6 @@ object SimplePredicate {
     new SimplePredicate(field, operator, predicateValue)
   }
 }
-
-sealed trait Value
-final case class CategoricalValue(b: String) extends Value
-final case class NumericalValue(a: Double) extends Value
 
 class SimplePredicate(field: String, operator: String, predicateValue: Value) {
   val GREATER_THAN     = "greaterThan"
