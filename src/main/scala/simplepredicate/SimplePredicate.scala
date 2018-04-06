@@ -1,8 +1,9 @@
 package simplepredicate
+import predicate.Predicate
 import value._
 
 object SimplePredicate {
-  def fromXml(xml_predicate: scala.xml.Elem): SimplePredicate = {
+  def fromXml(xml_predicate: scala.xml.Node): SimplePredicate = {
     val field: String = (xml_predicate \ "@field").text
     val operator: String = (xml_predicate \ "@operator").text
     val stringValue: String = (xml_predicate \ "@value").text
@@ -11,7 +12,7 @@ object SimplePredicate {
   }
 }
 
-class SimplePredicate(field: String, operator: String, predicateValue: Value) {
+class SimplePredicate(field: String, operator: String, predicateValue: Value) extends Predicate {
   val GREATER_THAN     = "greaterThan"
   val LESS_THAN        = "lessThan"
   val LESS_OR_EQUAL    = "lessOrEqual"
