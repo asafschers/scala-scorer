@@ -3,15 +3,16 @@ import predicate._
 import value._
 
 object Node {
-  def setFromXml(xml_predicate: scala.xml.Elem): Node = {
+  def fromXml(xml_predicate: scala.xml.Node): Node = {
     val score: Double = (xml_predicate \ "@score").text.toDouble
-    val predicate: Predicate = apply(xml_predicate)
-    new Node(predicate, score, xml_predicate.child)
+    val predicate: Predicate = Predicate.apply(xml_predicate)
+    val children: Seq[Node] = xml_predicate.child.map(xml => fromXml(xml))
+    new Node(predicate, score, children)
   }
 }
 
-class Node(predicate: Predicate, score: Double, children: Seq[scala.xml.Node]) {
-  def isTrue(features: Map[String, Value]) = {
-    true
+class Node(predicate: Predicate, score: Double, children: Seq[Node]) {
+  def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
+    predicate.isTrue(features)
   }
 }
