@@ -3,10 +3,10 @@ import predicate.Predicate
 import value._
 
 object SimplePredicate {
-  def fromXml(xml_predicate: scala.xml.Node): SimplePredicate = {
-    val field: String = (xml_predicate \ "@field").text
-    val operator: String = (xml_predicate \ "@operator").text
-    val stringValue: String = (xml_predicate \ "@value").text
+  def fromXml(xmlPredicate: scala.xml.Node): SimplePredicate = {
+    val field: String = (xmlPredicate \ "@field").text
+    val operator: String = (xmlPredicate \ "@operator").text
+    val stringValue: String = (xmlPredicate \ "@value").text
     val predicateValue = try { NumericalValue(stringValue.toDouble) } catch { case _ => CategoricalValue(stringValue) }
     new SimplePredicate(field, operator, predicateValue)
   }

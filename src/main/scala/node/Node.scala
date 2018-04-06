@@ -3,10 +3,10 @@ import predicate._
 import value._
 
 object Node {
-  def fromXml(xml_predicate: scala.xml.Node): Node = {
-    val score: Double = (xml_predicate \ "@score").text.toDouble
-    val predicate: Predicate = Predicate.apply(xml_predicate)
-    val children: Seq[Node] = xml_predicate.child.map(xml => fromXml(xml))
+  def fromXml(xmlPredicate: scala.xml.Node): Node = {
+    val score: Double = (xmlPredicate \ "@score").text.toDouble
+    val predicate: Predicate = Predicate.apply(xmlPredicate)
+    val children: Seq[Node] = xmlPredicate.child.map(xml => fromXml(xml))
     new Node(predicate, score, children)
   }
 }

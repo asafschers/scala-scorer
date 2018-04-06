@@ -5,10 +5,10 @@ import value._
 import scala.util.matching._
 
 object SimpleSetPredicate {
-  def fromXml(xml_predicate: scala.xml.Node): SimpleSetPredicate = {
-    val field: String = (xml_predicate \ "@field").text
-    val operator: String = (xml_predicate \ "@operator").text
-    val values: Array[String] = formatValuesArray((xml_predicate \ "Array").text)
+  def fromXml(xmlPredicate: scala.xml.Node): SimpleSetPredicate = {
+    val field: String = (xmlPredicate \ "@field").text
+    val operator: String = (xmlPredicate \ "@operator").text
+    val values: Array[String] = formatValuesArray((xmlPredicate \ "Array").text)
     new SimpleSetPredicate(field, operator, values)
   }
 
