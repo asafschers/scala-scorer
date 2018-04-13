@@ -1,17 +1,17 @@
-package decision_tree
+package treemodel
 
 import node._
 import value._
 
-object DecisionTree {
-  def fromXml(xmlPredicate: scala.xml.Node): DecisionTree = {
+object TreeModel {
+  def fromXml(xmlPredicate: scala.xml.Node): TreeModel = {
     val id: String = (xmlPredicate \ "@id").text
     val root: Node = Node.fromXml(xmlPredicate)
-    new DecisionTree(id, root)
+    new TreeModel(id, root)
   }
 }
 
-class DecisionTree(id: String, root: Node) {
+class TreeModel(id: String, root: Node) {
 
   def decide(features: Map[String, Value]): Double = {
     val current: Node = root
