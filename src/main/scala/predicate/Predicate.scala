@@ -2,13 +2,15 @@ package predicate
 
 import simplepredicate._
 import simplesetpredicate._
+import truepredicate._
 import value._
 
 object Predicate {
   def apply(xml: scala.xml.Node): Predicate = {
-    xml.text match {
+    xml.label match {
       case "SimplePredicate" => SimplePredicate.fromXml(xml)
       case "SimpleSetPredicate" => SimpleSetPredicate.fromXml(xml)
+      case "True" => new TruePredicate
     }
   }
 }
