@@ -15,8 +15,18 @@ object TreeModel {
 class TreeModel(id: String, root: Node) {
 
   def decide(features: Map[String, Value]): Option[Double] = {
-    val current: Node = root
-
+    var current: Node = root // TODO: change to val
+    while (current.children.nonEmpty) {
+      val next: Option[Node] = step(current, features)
+      current = next match {
+        case None => return None
+        case Some(node) => node
+      }
+    }
     current.score
+  }
+
+  def step(current: Node, features: Map[String, Value]): Option[Node] = {
+    current.children.find(_.isTrue(features) == Right(true))
   }
 }
