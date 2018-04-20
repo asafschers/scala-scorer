@@ -11,8 +11,9 @@ object Node {
   }
 }
 
-class Node(predicate: Predicate, inputScore: Option[Double], children: Seq[Node]) {
+class Node(predicate: Predicate, inputScore: Option[Double], inputChildren: Seq[Node]) {
   val score = inputScore
+  val children = inputChildren
 
   def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
     predicate.isTrue(features)
