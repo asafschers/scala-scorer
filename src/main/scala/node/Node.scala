@@ -5,7 +5,7 @@ import value._
 object Node {
   def fromXml(xmlPredicate: scala.xml.Node): Node = {
     val score: Option[Double] = try { Some((xmlPredicate \ "@score").text.toDouble) } catch { case _ => None }
-    val predicate: Predicate = Predicate.apply(xmlPredicate.child(0))
+    val predicate: Predicate = Predicate(xmlPredicate.child(0))
     val children: Seq[Node] = xmlPredicate.child.drop(1).map(xml => fromXml(xml))
     new Node(predicate, score, children)
   }
