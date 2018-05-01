@@ -7,7 +7,10 @@ object SimplePredicate {
     val field: String = (xmlPredicate \ "@field").text
     val operator: String = (xmlPredicate \ "@operator").text
     val stringValue: String = (xmlPredicate \ "@value").text
-    val predicateValue = try { NumericalValue(stringValue.toDouble) } catch { case _ => CategoricalValue(stringValue) }
+    val predicateValue = util.Try { stringValue.toDouble } match {
+      case util.Success(numericalValue) => NumericalValue(numericalValue)
+      case util.Failure(_) => CategoricalValue(stringValue)
+    }
     new SimplePredicate(field, operator, predicateValue)
   }
 }
