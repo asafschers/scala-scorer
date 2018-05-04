@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/asafschers/scala-scorer.svg?branch=master)](https://travis-ci.org/asafschers/scala-scorer)
+
 # scala-scorer
 
 Scala scoring API for Predictive Model Markup Language (PMML).
