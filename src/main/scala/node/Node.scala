@@ -4,8 +4,11 @@ import value._
 
 object Node {
   def fromXml(xmlPredicate: scala.xml.Node): Node = {
-    val score: Option[Double] = try { Some((xmlPredicate \ "@score").text.toDouble) } catch { case _ => None }
-    val predicate: Predicate = Predicate(xmlPredicate.child(0))
+    val score: Option[Double] = util.Try { Some((xmlPredicate \ "@score").text.toDouble) } match {
+      case util.Success(numericalScore) => numericalScore
+      case util.Failure(_) => None
+    }
+    val predicate: Predicate = Predicate(xmlPredicate.child.head)
     val children: Seq[Node] = xmlPredicate.child.drop(1).map(xml => fromXml(xml))
     new Node(predicate, score, children)
   }
