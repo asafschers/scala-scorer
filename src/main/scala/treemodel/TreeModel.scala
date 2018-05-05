@@ -6,8 +6,11 @@ import value._
 object TreeModel {
   def fromXml(xmlPredicate: scala.xml.Node): TreeModel = {
     val id: String = (xmlPredicate \ "@id").text
-    val node = (xmlPredicate \ "Node").head
-    val root: Node = Node.fromXml(node)
+    val node = (xmlPredicate \ "Node").headOption
+    val root: Node = node match {
+      case Some(existingNode) => Node.fromXml(existingNode)
+      case None => throw new Exception("Tree Without Root Node")
+    }
     new TreeModel(id, root)
   }
 }
