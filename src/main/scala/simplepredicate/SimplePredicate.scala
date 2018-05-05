@@ -16,13 +16,13 @@ object SimplePredicate {
 }
 
 class SimplePredicate(field: String, operator: String, predicateValue: Value) extends Predicate {
-  val GREATER_THAN     = "greaterThan"
-  val LESS_THAN        = "lessThan"
-  val LESS_OR_EQUAL    = "lessOrEqual"
-  val GREATER_OR_EQUAL = "greaterOrEqual"
-  val EQUALS           = "equal"
-  val IS_MISSING       = "isMissing"
-  val MATH_OPS = Array(GREATER_THAN, LESS_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL)
+  val GreaterThan     = "greaterThan"
+  val LessThan        = "lessThan"
+  val LessOrEqual     = "lessOrEqual"
+  val GreaterOrEqual  = "greaterOrEqual"
+  val Equals          = "equal"
+  val IsMissing       = "isMissing"
+  val MathOps = Array(GreaterThan, LessThan, LessOrEqual, GreaterOrEqual)
 
   def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
     val inputValue = features.get(field)
@@ -38,15 +38,15 @@ class SimplePredicate(field: String, operator: String, predicateValue: Value) ex
     inputValue match {
       case Some(NumericalValue(numericalValue)) =>
         operator match {
-          case GREATER_THAN =>
+          case GreaterThan =>
             Right(numericalValue > predicateValue)
-          case LESS_THAN =>
+          case LessThan =>
             Right(numericalValue < predicateValue)
-          case GREATER_OR_EQUAL =>
+          case GreaterOrEqual =>
             Right(numericalValue >= predicateValue)
-          case LESS_OR_EQUAL =>
+          case LessOrEqual =>
             Right(numericalValue <= predicateValue)
-          case EQUALS =>
+          case Equals =>
             Right(numericalValue == predicateValue)
         }
       case Some(CategoricalValue(_)) =>
@@ -60,16 +60,16 @@ class SimplePredicate(field: String, operator: String, predicateValue: Value) ex
     inputValue match {
       case Some(CategoricalValue(categoricalValue)) =>
         operator match {
-          case IS_MISSING =>
+          case IsMissing =>
             Right(categoricalValue == "")
-          case EQUALS =>
+          case Equals =>
             Right(categoricalValue == predicateValue)
         }
       case Some(NumericalValue(_)) =>
         Right(false)
       case None =>
         operator match {
-          case IS_MISSING =>
+          case IsMissing =>
             Right(inputValue.isEmpty)
         }
     }
