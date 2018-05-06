@@ -8,7 +8,7 @@ import scala.xml.{Elem, Node}
 
 class GradientBoostedModelSpec extends FlatSpec with Matchers {
   val source: BufferedSource = Source.fromResource("titanic_gbm.pmml")
-  val modelContent: String = try source.mkString finally source.close()
+  val modelContent: String = source.mkString; source.close()
   val modelPmml: Elem = scala.xml.XML.loadString(modelContent)
   val trimmedModelPmml: Node = scala.xml.Utility.trim(modelPmml)
   val model: GradientBoostedModel = GradientBoostedModel.fromXml(trimmedModelPmml)
