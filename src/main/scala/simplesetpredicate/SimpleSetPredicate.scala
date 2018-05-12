@@ -18,7 +18,7 @@ object SimpleSetPredicate {
 }
 
 class SimpleSetPredicate(field: String, operator: String, values: List[String]) extends Predicate {
-  val IS_IN = "is_in"
+  val IsIN = "is_in"
 
   def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
     val inputValue = features.get(field)
