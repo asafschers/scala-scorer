@@ -1,8 +1,5 @@
 package predicate
 
-import simplepredicate._
-import simplesetpredicate._
-import truepredicate._
 import value._
 
 object Predicate {

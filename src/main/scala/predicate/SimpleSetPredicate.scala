@@ -1,9 +1,6 @@
-package simplesetpredicate
-import simplesetpredicate.SimpleSetPredicate._
-import predicate.Predicate
-import value._
+package predicate
 
-import scala.util.matching._
+import value._
 
 object SimpleSetPredicate {
   val IsIN = "is_in"

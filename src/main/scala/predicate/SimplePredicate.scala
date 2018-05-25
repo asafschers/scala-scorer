@@ -1,7 +1,7 @@
-package simplepredicate
-import simplepredicate.SimplePredicate._
-import predicate.Predicate
+package predicate
+
 import value._
+import predicate.SimplePredicate._
 
 object SimplePredicate {
   val GreaterThan     = "greaterThan"

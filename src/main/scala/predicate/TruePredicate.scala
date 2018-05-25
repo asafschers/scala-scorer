@@ -1,6 +1,5 @@
-package truepredicate
+package predicate
 
-import predicate.Predicate
 import value.Value
 
 class TruePredicate extends Predicate {

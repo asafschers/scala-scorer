@@ -1,6 +1,7 @@
 package simplepredicate
 import value._
 import org.scalatest._
+import predicate.SimplePredicate
 
 class SimplePredicateSpec extends FlatSpec with Matchers {
 
