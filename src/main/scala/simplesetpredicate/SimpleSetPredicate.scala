@@ -1,10 +1,13 @@
 package simplesetpredicate
+import simplesetpredicate.SimpleSetPredicate._
 import predicate.Predicate
 import value._
 
 import scala.util.matching._
 
 object SimpleSetPredicate {
+  val IsIN = "is_in"
+
   def fromXml(xmlPredicate: scala.xml.Node): SimpleSetPredicate = {
     val field: String = (xmlPredicate \ "@field").text
     val operator: String = (xmlPredicate \ "@operator").text
@@ -18,7 +21,6 @@ object SimpleSetPredicate {
 }
 
 class SimpleSetPredicate(field: String, operator: String, values: List[String]) extends Predicate {
-  val IsIN = "is_in"
 
   def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
     val inputValue = features.get(field)
