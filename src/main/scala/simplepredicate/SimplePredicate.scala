@@ -1,8 +1,17 @@
 package simplepredicate
+import simplepredicate.SimplePredicate._
 import predicate.Predicate
 import value._
 
 object SimplePredicate {
+  val GreaterThan     = "greaterThan"
+  val LessThan        = "lessThan"
+  val LessOrEqual     = "lessOrEqual"
+  val GreaterOrEqual  = "greaterOrEqual"
+  val Equals          = "equal"
+  val IsMissing       = "isMissing"
+  val MathOps = Array(GreaterThan, LessThan, LessOrEqual, GreaterOrEqual)
+
   def fromXml(xmlPredicate: scala.xml.Node): SimplePredicate = {
     val field: String = (xmlPredicate \ "@field").text
     val operator: String = (xmlPredicate \ "@operator").text
@@ -16,13 +25,6 @@ object SimplePredicate {
 }
 
 class SimplePredicate(field: String, operator: String, predicateValue: Value) extends Predicate {
-  val GreaterThan     = "greaterThan"
-  val LessThan        = "lessThan"
-  val LessOrEqual     = "lessOrEqual"
-  val GreaterOrEqual  = "greaterOrEqual"
-  val Equals          = "equal"
-  val IsMissing       = "isMissing"
-  val MathOps = Array(GreaterThan, LessThan, LessOrEqual, GreaterOrEqual)
 
   def isTrue(features: Map[String, Value]): Either[String, Boolean] = {
     val inputValue = features.get(field)
